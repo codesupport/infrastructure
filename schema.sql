@@ -1,3 +1,12 @@
+drop table if exists role_to_permission;
+drop table if exists user_to_permission;
+drop table if exists user_to_user_award;
+drop table if exists user;
+drop table if exists country;
+drop table if exists role;
+drop table if exists permission;
+drop table if exists user_award;
+
 create table country(
   id bigint not null,
   code varchar(255) null,
@@ -62,35 +71,36 @@ create table user_to_user_award(
     user_award_id
   )
 );
+
 alter table role_to_permission
   add constraint fkc9fvvy6i3kwqbn3smrjf2mbwk
     foreign key (permission_id)
-    references permission;
+    references permission(id);
 alter table role_to_permission
   add constraint fkqfp31u3h3h23odisophicjwcr
     foreign key (role_id)
-    references role;
+    references role(id);
 alter table user
   add constraint fkge8lxibk9q3wf206s600otk61
     foreign key (country_id)
-    references country;
+    references country(id);
 alter table user
   add constraint fkn82ha3ccdebhokx3a8fgdqeyy
     foreign key (role_id)
-    references role;
+    references role(id);
 alter table user_to_permission
   add constraint fk6gip26de7n8n227myqoanrt09
     foreign key (permission_id)
-    references permission;
+    references permission(id);
 alter table user_to_permission
   add constraint fkwabgwk1psd2mrnrm7j45ng80
     foreign key (user_id)
-    references user;
+    references user(id);
 alter table user_to_user_award
   add constraint fki5uspohcoxkvq11ugl8olluae
     foreign key (user_award_id)
-    references user_award;
+    references user_award(id);
 alter table user_to_user_award
   add constraint fk3n2mbd92bjlp9nspexm6k5scq
     foreign key (user_id)
-    references user;
+    references user(id);
