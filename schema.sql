@@ -1,5 +1,3 @@
-use codesupport;
-
 drop table if exists role_to_permission;
 drop table if exists user_to_permission;
 drop table if exists user_to_user_award;
