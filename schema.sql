@@ -1,3 +1,5 @@
+use codesupport;
+
 drop table if exists role_to_permission;
 drop table if exists user_to_permission;
 drop table if exists user_to_user_award;
@@ -47,8 +49,11 @@ create table user(
   biography varchar(255) null,
   disabled boolean not null,
   discord_id varchar(255) null,
+  discord_username varchar(255) null,
   email varchar(255) not null,
-  git_url varchar(255) null,
+  github_username varchar(255) null,
+  job_title varchar(255) null,
+  job_company varchar(255) null,
   hash_password varchar(255) not null,
   join_date bigint not null,
   country_id bigint null,
