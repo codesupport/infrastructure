@@ -54,7 +54,7 @@ create table `user`(
 create table `showcase`(
   `id` bigint not null auto_increment,
   `approved` boolean not null,
-  `description` text null,
+  `description` varchar(255) null,
   `link` varchar(255) null,
   `title` varchar(40) null,
   `contributor_list_id` bigint not null,
