@@ -27,14 +27,14 @@ create table `user_to_permission`(
   )
 );
 create table `user_award`(
-  `id` bigint not null,
+  `id` bigint not null auto_increment,
   `code` varchar(255) null,
   `description` varchar(255) null,
   `label` varchar(255) null,
   primary key (id)
 );
 create table `user`(
-  `id` bigint not null,
+  `id` bigint not null auto_increment,
   `alias` varchar(255) not null,
   `avatar_link` varchar(255) null,
   `biography` varchar(255) null,
@@ -52,7 +52,7 @@ create table `user`(
   primary key (id)
 );
 create table `showcase`(
-  `id` bigint not null,
+  `id` bigint not null auto_increment,
   `approved` boolean not null,
   `description` text null,
   `link` varchar(255) null,
@@ -70,29 +70,29 @@ create table `role_to_permission`(
   )
 );
 create table `role`(
-  `id` bigint not null,
+  `id` bigint not null auto_increment,
   `code` varchar(255) null,
   `label` varchar(255) null,
   primary key (id)
 );
 create table `permission`(
-  `id` bigint not null,
+  `id` bigint not null auto_increment,
   `code` varchar(255) null,
   `label` varchar(255) null,
   primary key (id)
 );
 create table `country`(
-  `id` bigint not null,
+  `id` bigint not null auto_increment,
   `code` varchar(255) null,
   `label` varchar(255) null,
   primary key (id)
 );
 create table `contributor_list`(
-  `id` bigint not null,
+  `id` bigint not null auto_increment,
   primary key (id)
 );
 create table `contributor`(
-  `id` bigint not null,
+  `id` bigint not null auto_increment,
   `alias` varchar(50) null,
   `contributor_list_id` bigint not null,
   `user_id` bigint null,
