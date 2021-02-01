@@ -1,149 +1,169 @@
-drop table if exists contributor;
-drop table if exists showcase;
-drop table if exists contributor_list;
-drop table if exists role_to_permission;
-drop table if exists user_to_permission;
-drop table if exists user_to_user_award;
-drop table if exists user;
-drop table if exists country;
-drop table if exists role;
-drop table if exists permission;
-drop table if exists user_award;
-
-create table `user_to_user_award`(
-  `user_id` bigint not null,
-  `user_award_id` bigint not null,
-  primary key (
-    user_id, 
-    user_award_id
-  )
-);
-create table `user_to_permission`(
-  `user_id` bigint not null,
-  `permission_id` bigint not null,
-  primary key (
-    user_id, 
-    permission_id
-  )
-);
-create table `user_award`(
-  `id` bigint not null auto_increment,
-  `code` varchar(255) null,
-  `description` varchar(255) null,
-  `label` varchar(255) null,
-  primary key (id)
-);
-create table `user`(
-  `id` bigint not null auto_increment,
-  `alias` varchar(255) not null,
-  `avatar_link` varchar(255) null,
-  `biography` varchar(255) null,
-  `disabled` boolean not null,
-  `discord_id` varchar(255) null,
-  `discord_username` varchar(255) null,
-  `email` varchar(255) not null,
-  `github_username` varchar(255) null,
-  `hash_password` varchar(255) not null,
-  `job_company` varchar(255) null,
-  `job_title` varchar(255) null,
-  `join_date` bigint not null,
-  `country_id` bigint null,
-  `role_id` bigint null,
-  primary key (id)
-);
-create table `showcase`(
-  `id` bigint not null auto_increment,
-  `approved` boolean not null,
-  `description` varchar(255) null,
-  `link` varchar(255) null,
-  `title` varchar(40) null,
-  `contributor_list_id` bigint not null,
-  `user_id` bigint not null,
-  primary key (id)
-);
-create table `role_to_permission`(
-  `role_id` bigint not null,
-  `permission_id` bigint not null,
-  primary key (
-    role_id, 
-    permission_id
-  )
-);
-create table `role`(
-  `id` bigint not null auto_increment,
-  `code` varchar(255) null,
-  `label` varchar(255) null,
-  primary key (id)
-);
-create table `permission`(
-  `id` bigint not null auto_increment,
-  `code` varchar(255) null,
-  `label` varchar(255) null,
-  primary key (id)
-);
-create table `country`(
-  `id` bigint not null auto_increment,
-  `code` varchar(255) null,
-  `label` varchar(255) null,
-  primary key (id)
-);
-create table `contributor_list`(
-  `id` bigint not null auto_increment,
-  primary key (id)
-);
-create table `contributor`(
-  `id` bigint not null auto_increment,
-  `alias` varchar(50) null,
-  `contributor_list_id` bigint not null,
-  `user_id` bigint null,
-  primary key (id)
+CREATE TABLE `user` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `alias` varchar(50) NOT NULL,
+  `hash_password` varchar(100) NOT NULL,
+  `verify_token` varchar(50),
+  `discord_id` varchar(50),
+  `discord_username` varchar(50),
+  `github_username` varchar(50),
+  `job_title` varchar(50),
+  `job_company` varchar(50),
+  `access_token` varchar(50),
+  `access_token_expire_on` bigint,
+  `email` varchar(100) NOT NULL,
+  `avatar_link` varchar(100),
+  `disabled` boolean NOT NULL,
+  `role_id` bigint,
+  `biography` varchar(255),
+  `country_id` bigint,
+  `join_date` bigint NOT NULL
 );
 
-alter table `user_to_user_award`
-  add constraint `fki5uspohcoxkvq11ugl8olluae`
-    foreign key (`user_award_id`)
-    references `user_award` (`id`);
-alter table `user_to_user_award`
-  add constraint `fk3n2mbd92bjlp9nspexm6k5scq`
-    foreign key (`user_id`)
-    references `user` (`id`);
-alter table `user_to_permission`
-  add constraint `fkwabgwk1psd2mrnrm7j45ng80`
-    foreign key (`user_id`)
-    references `user` (`id`);
-alter table `user_to_permission`
-  add constraint `fk6gip26de7n8n227myqoanrt09`
-    foreign key (`permission_id`)
-    references `permission` (`id`);
-alter table `user`
-  add constraint `fkn82ha3ccdebhokx3a8fgdqeyy`
-    foreign key (`role_id`)
-    references `role` (`id`);
-alter table `user`
-  add constraint `fkge8lxibk9q3wf206s600otk61`
-    foreign key (`country_id`)
-    references `country` (`id`);
-alter table `showcase`
-  add constraint `fk9pbwtnixrp3hi8ktoxh922kvi`
-    foreign key (`user_id`)
-    references `user` (`id`);
-alter table `showcase`
-  add constraint `fk994lsa97drsw5s148yfql9kpt`
-    foreign key (`contributor_list_id`)
-    references `contributor_list` (`id`);
-alter table `role_to_permission`
-  add constraint `fkqfp31u3h3h23odisophicjwcr`
-    foreign key (`role_id`)
-    references `role` (`id`);
-alter table `role_to_permission`
-  add constraint `fkc9fvvy6i3kwqbn3smrjf2mbwk`
-    foreign key (`permission_id`)
-    references `permission` (`id`);
-alter table `contributor`
-  add constraint `fkrygiemk5fb5drrv4xxxmfhf1k`
-    foreign key (`user_id`)
-    references `user` (`id`);
-alter table `contributor`
-  add constraint `fkrebkriwkdyje35vgwfr5fom81`
-    foreign key (`contributor_list_id`)
-    references `contributor_list` (`id`);
+CREATE TABLE `user_award` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `code` varchar(100) UNIQUE NOT NULL COMMENT 'Machine friendly name',
+  `description` varchar(255) NOT NULL,
+  `label` varchar(50) NOT NULL COMMENT 'Pretty name label'
+);
+
+CREATE TABLE `user_to_user_award` (
+  `user_id` bigint NOT NULL,
+  `user_award_id` bigint NOT NULL
+);
+
+CREATE TABLE `role` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `code` varchar(20) NOT NULL COMMENT 'Machine friendly name',
+  `label` varchar(20) NOT NULL COMMENT 'Pretty name label'
+);
+
+CREATE TABLE `permission` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `code` varchar(20) NOT NULL COMMENT 'Machine friendly name',
+  `label` varchar(20) NOT NULL COMMENT 'Pretty name label'
+);
+
+CREATE TABLE `role_to_permission` (
+  `role_id` bigint NOT NULL,
+  `permission_id` bigint NOT NULL
+);
+
+CREATE TABLE `user_to_permission` (
+  `user_id` bigint NOT NULL,
+  `permission_id` bigint NOT NULL
+);
+
+CREATE TABLE `country` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `code` varchar(2) NOT NULL COMMENT 'Machine friendly name',
+  `label` varchar(50) NOT NULL COMMENT 'Pretty name label'
+);
+
+CREATE TABLE `tag_set` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT
+);
+
+CREATE TABLE `tag` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `label` varchar(50) NOT NULL
+);
+
+CREATE TABLE `tag_set_to_tag` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `tag_id` bigint NOT NULL,
+  `tag_set_id` bigint NOT NULL
+);
+
+CREATE TABLE `article` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `article_code` varchar(20) NOT NULL COMMENT 'Used to relate versions of the same article',
+  `title` varchar(50) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `content` blob NOT NULL,
+  `finalized` boolean NOT NULL DEFAULT 0,
+  `tag_set_id` bigint NOT NULL,
+  `created_by` bigint NOT NULL,
+  `created_on` bigint NOT NULL,
+  `updated_by` bigint NOT NULL,
+  `updated_on` bigint NOT NULL
+);
+
+CREATE TABLE `published_article` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `article_id` bigint NOT NULL,
+  `article_code` varchar(20) COMMENT 'Used to relate versions of the same article',
+  `published` boolean NOT NULL DEFAULT 0
+);
+
+CREATE TABLE `image_reference` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `article_id` bigint NOT NULL,
+  `image_name` varchar(30)
+);
+
+CREATE TABLE `showcase` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `title` varchar(50) NOT NULL,
+  `description` varchar(255) NOT NULL,
+  `link` varchar(255) NOT NULL,
+  `approved` boolean NOT NULL DEFAULT 0,
+  `tag_set_id` bigint NOT NULL,
+  `contributor_list_id` bigint NOT NULL,
+  `created_by` bigint,
+  `created_on` bigint,
+  `updated_by` bigint,
+  `updated_on` bigint
+);
+
+CREATE TABLE `contributor` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `alias` varchar(50) COMMENT 'Either alias or user_id is supplied',
+  `user_id` bigint COMMENT 'Either alias or user_id is supplied',
+  `contributor_list_id` bigint
+);
+
+CREATE TABLE `contributor_list` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT
+);
+
+ALTER TABLE `user` ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
+
+ALTER TABLE `user_to_user_award` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+ALTER TABLE `user_to_user_award` ADD FOREIGN KEY (`user_award_id`) REFERENCES `user_award` (`id`);
+
+ALTER TABLE `user_to_permission` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
+
+ALTER TABLE `user_to_permission` ADD FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`);
+
+ALTER TABLE `role_to_permission` ADD FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
+
+ALTER TABLE `role_to_permission` ADD FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`);
+
+ALTER TABLE `user` ADD FOREIGN KEY (`country_id`) REFERENCES `country` (`id`);
+
+ALTER TABLE `tag_set_to_tag` ADD FOREIGN KEY (`tag_set_id`) REFERENCES `tag_set` (`id`);
+
+ALTER TABLE `tag_set_to_tag` ADD FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`);
+
+ALTER TABLE `article` ADD FOREIGN KEY (`tag_set_id`) REFERENCES `tag_set` (`id`);
+
+ALTER TABLE `published_article` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);
+
+ALTER TABLE `image_reference` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);
+
+ALTER TABLE `article` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
+
+ALTER TABLE `article` ADD FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`);
+
+ALTER TABLE `showcase` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
+
+ALTER TABLE `showcase` ADD FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`);
+
+ALTER TABLE `showcase` ADD FOREIGN KEY (`tag_set_id`) REFERENCES `tag_set` (`id`);
+
+ALTER TABLE `showcase` ADD FOREIGN KEY (`contributor_list_id`) REFERENCES `contributor_list` (`id`);
+
+ALTER TABLE `contributor` ADD FOREIGN KEY (`contributor_list_id`) REFERENCES `contributor_list` (`id`);
+
+ALTER TABLE `contributor` ADD FOREIGN KEY (`user_id`) REFERENCES `user` (`id`);
