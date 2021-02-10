@@ -74,25 +74,24 @@ CREATE TABLE `tag_set_to_tag` (
   `tag_set_id` bigint NOT NULL
 );
 
-CREATE TABLE `article` (
+CREATE TABLE `article_revision` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `article_code` varchar(20) NOT NULL COMMENT 'Used to relate versions of the same article',
-  `title` varchar(50) NOT NULL,
+  `article_id` bigint NOT NULL,
   `description` varchar(255) NOT NULL,
   `content` blob NOT NULL,
-  `finalized` boolean NOT NULL DEFAULT 0,
   `tag_set_id` bigint NOT NULL,
+  `created_by` bigint NOT NULL,
+  `created_on` bigint NOT NULL
+);
+
+CREATE TABLE `article` (
+  `id` bigint PRIMARY KEY AUTO_INCREMENT,
+  `revision_id` bigint,
+  `title` varchar(50) NOT NULL,
   `created_by` bigint NOT NULL,
   `created_on` bigint NOT NULL,
   `updated_by` bigint NOT NULL,
   `updated_on` bigint NOT NULL
-);
-
-CREATE TABLE `published_article` (
-  `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `article_id` bigint NOT NULL,
-  `article_code` varchar(20) COMMENT 'Used to relate versions of the same article',
-  `published` boolean NOT NULL DEFAULT 0
 );
 
 CREATE TABLE `image_reference` (
@@ -146,15 +145,19 @@ ALTER TABLE `tag_set_to_tag` ADD FOREIGN KEY (`tag_set_id`) REFERENCES `tag_set`
 
 ALTER TABLE `tag_set_to_tag` ADD FOREIGN KEY (`tag_id`) REFERENCES `tag` (`id`);
 
-ALTER TABLE `article` ADD FOREIGN KEY (`tag_set_id`) REFERENCES `tag_set` (`id`);
-
-ALTER TABLE `published_article` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);
-
-ALTER TABLE `image_reference` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);
+ALTER TABLE `article` ADD FOREIGN KEY (`revision_id`) REFERENCES `article_revision` (`id`);
 
 ALTER TABLE `article` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
 
 ALTER TABLE `article` ADD FOREIGN KEY (`updated_by`) REFERENCES `user` (`id`);
+
+ALTER TABLE `article_revision` ADD FOREIGN KEY (`article_id`) REFERENCES `article` (`id`);
+
+ALTER TABLE `article_revision` ADD FOREIGN KEY (`tag_set_id`) REFERENCES `tag_set` (`id`);
+
+ALTER TABLE `article_revision` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
+
+ALTER TABLE `image_reference` ADD FOREIGN KEY (`article_id`) REFERENCES `article_revision` (`id`);
 
 ALTER TABLE `showcase` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
 
