@@ -96,7 +96,7 @@ CREATE TABLE `article` (
 
 CREATE TABLE `image_reference` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `article_id` bigint NOT NULL,
+  `revision_id` bigint NOT NULL,
   `image_name` varchar(30)
 );
 
@@ -157,7 +157,7 @@ ALTER TABLE `article_revision` ADD FOREIGN KEY (`tag_set_id`) REFERENCES `tag_se
 
 ALTER TABLE `article_revision` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
 
-ALTER TABLE `image_reference` ADD FOREIGN KEY (`article_id`) REFERENCES `article_revision` (`id`);
+ALTER TABLE `image_reference` ADD FOREIGN KEY (`revision_id`) REFERENCES `article_revision` (`id`);
 
 ALTER TABLE `showcase` ADD FOREIGN KEY (`created_by`) REFERENCES `user` (`id`);
 
