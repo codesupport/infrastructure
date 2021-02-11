@@ -1,6 +1,6 @@
 CREATE TABLE `user` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `alias` varchar(50) NOT NULL,
+  `alias` varchar(50) UNIQUE NOT NULL,
   `hash_password` varchar(100) NOT NULL,
   `verify_token` varchar(50),
   `discord_id` varchar(50),
@@ -10,9 +10,9 @@ CREATE TABLE `user` (
   `job_company` varchar(50),
   `access_token` varchar(50),
   `access_token_expire_on` bigint,
-  `email` varchar(100) NOT NULL,
+  `email` varchar(100) UNIQUE NOT NULL,
   `avatar_link` varchar(100),
-  `disabled` boolean NOT NULL,
+  `disabled` boolean NOT NULL DEFAULT 0,
   `role_id` bigint,
   `biography` varchar(255),
   `country_id` bigint,
@@ -33,13 +33,13 @@ CREATE TABLE `user_to_user_award` (
 
 CREATE TABLE `role` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL COMMENT 'Machine friendly name',
+  `code` varchar(20) UNIQUE NOT NULL COMMENT 'Machine friendly name',
   `label` varchar(20) NOT NULL COMMENT 'Pretty name label'
 );
 
 CREATE TABLE `permission` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `code` varchar(20) NOT NULL COMMENT 'Machine friendly name',
+  `code` varchar(20) UNIQUE NOT NULL COMMENT 'Machine friendly name',
   `label` varchar(20) NOT NULL COMMENT 'Pretty name label'
 );
 
@@ -55,7 +55,7 @@ CREATE TABLE `user_to_permission` (
 
 CREATE TABLE `country` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `code` varchar(2) NOT NULL COMMENT 'Machine friendly name',
+  `code` varchar(2) UNIQUE NOT NULL COMMENT 'Machine friendly name',
   `label` varchar(50) NOT NULL COMMENT 'Pretty name label'
 );
 
@@ -65,7 +65,7 @@ CREATE TABLE `tag_set` (
 
 CREATE TABLE `tag` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
-  `label` varchar(50) NOT NULL
+  `label` varchar(50) UNIQUE NOT NULL
 );
 
 CREATE TABLE `tag_set_to_tag` (
@@ -87,7 +87,7 @@ CREATE TABLE `article_revision` (
 CREATE TABLE `article` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `revision_id` bigint,
-  `title` varchar(50) NOT NULL,
+  `title` varchar(50) UNIQUE NOT NULL,
   `created_by` bigint NOT NULL,
   `created_on` bigint NOT NULL,
   `updated_by` bigint NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE `article` (
 CREATE TABLE `image_reference` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `revision_id` bigint NOT NULL,
-  `image_name` varchar(30)
+  `image_name` varchar(30) UNIQUE NOT NULL
 );
 
 CREATE TABLE `showcase` (
