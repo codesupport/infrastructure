@@ -12,7 +12,7 @@ CREATE TABLE `user` (
   `access_token_expire_on` bigint,
   `email` varchar(100) UNIQUE NOT NULL,
   `avatar_link` varchar(100),
-  `disabled` boolean NOT NULL,
+  `disabled` boolean NOT NULL DEFAULT 0,
   `role_id` bigint,
   `biography` varchar(255),
   `country_id` bigint,
