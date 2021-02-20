@@ -56,7 +56,7 @@ CREATE TABLE `user_to_permission` (
 CREATE TABLE `country` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `code` varchar(2) UNIQUE NOT NULL COMMENT 'Machine friendly name',
-  `label` varchar(50) NOT NULL COMMENT 'Pretty name label'
+  `label` varchar(100) NOT NULL COMMENT 'Pretty name label'
 );
 
 CREATE TABLE `tag_set` (
@@ -87,7 +87,9 @@ CREATE TABLE `article_revision` (
 CREATE TABLE `article` (
   `id` bigint PRIMARY KEY AUTO_INCREMENT,
   `revision_id` bigint,
-  `title` varchar(50) UNIQUE NOT NULL,
+  `title` varchar(100) NOT NULL,
+  `title_id` varchar(100) UNIQUE NOT NULL,
+  `image_name` varchar(30),
   `created_by` bigint NOT NULL,
   `created_on` bigint NOT NULL,
   `updated_by` bigint NOT NULL,
