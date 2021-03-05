@@ -1,0 +1,22 @@
+import Datetime;
+import Path;
+
+class TwitterStorage {
+    var path = "last_tweet_id.txt";
+
+    static persist(id) {
+        with(TwitterStorage.path, "w") {
+            file.write(id);
+        }
+    }
+
+    static read() {
+        if (!Path.exists(TwitterStorage.path)) {
+            return nil;
+        }
+
+        with(TwitterStorage.path, "r") {
+            return file.read();
+        }
+    }
+}
