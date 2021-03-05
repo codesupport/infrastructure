@@ -1,0 +1,7 @@
+import Datetime;
+
+class Logger {
+    static log(message) {
+        print("[{}]: {}".format(Datetime.strftime("%d/%b/%Y %H:%M:%S"), message));
+    }
+}
