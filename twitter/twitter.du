@@ -5,7 +5,7 @@ from "twitterStorage.du" import TwitterStorage;
 from "logger.du" import Logger;
 
 class Twitter {
-    var URL = "https://api.twitter.com/2/users/{}/tweets?expansions=attachments.media_keys&media.fields=url&exclude=replies{}";
+    const URL = "https://api.twitter.com/2/users/{}/tweets?expansions=attachments.media_keys&media.fields=url&exclude=replies{}";
 
     init(private token, private userId) {}
 
@@ -30,7 +30,7 @@ class Twitter {
 
             const tcoUrl = message[startIndex:endIndex];
             const response = HTTP.get(tcoUrl).unwrap();
-            var location = response["headers"].find(def (header) => header.contains("location: "));
+            var location = response.headers.find(def (header) => header.contains("location: "));
 
             if (location == nil) {
                 Logger.log("Nil location header found breaking loop");
@@ -85,7 +85,7 @@ class Twitter {
             ["Authorization: bearer {}".format(this.token)]
         ).unwrap();
 
-        var tweets = JSON.parse(results["content"]).unwrap();
+        var tweets = results.json().unwrap();
 
         if (tweets["meta"]["result_count"] == 0) {
             return [];
