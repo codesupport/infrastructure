@@ -2,20 +2,20 @@ import Datetime;
 import Path;
 
 class TwitterStorage {
-    var path = "last_tweet_id.txt";
+    const PATH = "last_tweet_id.txt";
 
     static persist(id) {
-        with(TwitterStorage.path, "w") {
+        with(TwitterStorage.PATH, "w") {
             file.write(id);
         }
     }
 
     static read() {
-        if (!Path.exists(TwitterStorage.path)) {
+        if (not Path.exists(TwitterStorage.PATH)) {
             return nil;
         }
 
-        with(TwitterStorage.path, "r") {
+        with(TwitterStorage.PATH, "r") {
             return file.read();
         }
     }
