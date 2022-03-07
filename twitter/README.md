@@ -8,8 +8,6 @@ This repo integrates the twitter API along with Discord webhooks. It works by po
 
 This script is written in [Dictu](https://github.com/dictu-lang/Dictu) so to use it, ensure Dictu is installed first.
 
-**Note:** This script is currently using features in Dictu that are not yet in a main and/or versioned branch. Ensure to checkout `feature/http` when building.
-
 ### Env Variables
 
 To get setup this project requires a `.env` file in the project root, an example is provided at `.env.example`.
