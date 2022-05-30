@@ -24,7 +24,7 @@ class Twitter {
             const startIndex = message.find("https://t.co/");
             var endIndex = startIndex + 13;
 
-            while (endIndex != message.len() and message[endIndex] != " ") {
+            while (endIndex != message.len() and message[endIndex] != " " and message[endIndex] != "\n") {
                 endIndex += 1;
             }
 
