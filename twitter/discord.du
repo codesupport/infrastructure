@@ -1,0 +1,35 @@
+import HTTP;
+import JSON;
+
+class Discord {
+    const AVATAR = "https://images-ext-2.discordapp.net/external/y4DxjdJsCMA6xNO7opKMRcWLl4mMzO3T6YvSZK1y6BU/https/pbs.twimg.com/profile_images/959799942062723072/HLGQOlM1_bigger.png";
+
+    init(private webhookURL) {}
+
+    private generateEmbed(message) {
+        const embed = {
+            "username": "CodeSupport",
+            "avatar_url": Discord.AVATAR,
+            "embeds": [{
+                "author": {
+                    "name": "CodeSupport (@codesupportdev)",
+                    "url": "https://twitter.com/codesupportdev",
+                    "icon_url": Discord.AVATAR
+                },
+                "description": "{}\n\n[View Tweet]({})".format(message["text"], message["url"]),
+                "color": 2201331
+            }]
+        };
+
+        if (message.exists("photo")) {
+            embed["embeds"][0]["image"] = {"url": message["photo"]};
+        }
+
+        return embed;
+    }
+
+    sendMessage(message) {
+        message = JSON.stringify(this.generateEmbed(message)).unwrap();
+        HTTP.post(this.webhookURL, message, ["Content-Type: application/json"]).unwrap();
+    }
+}

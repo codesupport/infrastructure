@@ -1,0 +1,101 @@
+import HTTP;
+import JSON;
+
+from "twitterStorage.du" import TwitterStorage;
+from "logger.du" import Logger;
+
+class Twitter {
+    const URL = "https://api.twitter.com/2/users/{}/tweets?expansions=attachments.media_keys&media.fields=url&exclude=replies{}";
+
+    init(private token, private userId) {}
+
+    private findMeidaUrl(media, mediaId) {
+        const foundMedia = media.find(def (item) => item["media_key"] == mediaId);
+        
+        if (foundMedia) {
+            return foundMedia["url"];
+        }
+
+        return "";
+    }
+
+    private parseTcoLink(message) {
+        while (message.contains("https://t.co/")) {
+            const startIndex = message.find("https://t.co/");
+            var endIndex = startIndex + 13;
+
+            while (endIndex != message.len() and message[endIndex] != " ") {
+                endIndex += 1;
+            }
+
+            const tcoUrl = message[startIndex:endIndex];
+            const response = HTTP.get(tcoUrl).unwrap();
+            var location = response.headers.find(def (header) => header.contains("location: "));
+
+            if (location == nil) {
+                Logger.log("Nil location header found breaking loop");
+                break;
+            }
+
+            // strip 'location: ' from header
+            location = location[10:];
+
+            // Images seem to contain this link for some reason. Remove it
+            if (location.startsWith("https://twitter.com/codesupportdev/status")) {
+                location = "";
+            }
+
+            message = message.replace(tcoUrl, location);
+        }
+
+        return message;
+    }
+
+    private addTwitterLink(id) {
+        const url = "https://twitter.com/{}/status/{}";
+        return url.format(this.userId, id);
+    }
+
+    private formatTweets(tweets) {
+        const formattedTweets = tweets["data"];
+
+        formattedTweets.forEach(def (formattedTweet) => {
+            formattedTweet["text"] = this.parseTcoLink(formattedTweet["text"]);
+            formattedTweet["url"] = this.addTwitterLink(formattedTweet["id"]);
+
+            if (formattedTweet.exists("attachments")) {
+                const mediaId = formattedTweet["attachments"]["media_keys"][0];
+                formattedTweet["photo"] = this.findMeidaUrl(tweets["includes"]["media"], mediaId);
+            }
+        });
+
+        return formattedTweets;
+    }
+
+    getTweets() {
+        const twitterId = TwitterStorage.read();
+        var sinceId = "";
+
+        if (twitterId) {
+            sinceId = "&since_id={}".format(twitterId);
+        }
+
+        const results = HTTP.get(
+            Twitter.URL.format(this.userId, sinceId).strip(),
+            ["Authorization: bearer {}".format(this.token)]
+        ).unwrap();
+
+        var tweets = results.json().unwrap();
+
+        if (tweets["meta"]["result_count"] == 0) {
+            return [];
+        }
+
+        const formattedTweets = this.formatTweets(tweets);
+
+        // Assume the first tweet in the list is the newest
+        TwitterStorage.persist(formattedTweets[0]["id"]);
+
+        return formattedTweets;
+    }
+}
