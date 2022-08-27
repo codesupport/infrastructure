@@ -9,7 +9,8 @@ services:
       - key: DATABASE_URL
         fromService:
           name: codesupport-ugc-db
-          type: connectionString
+          type: database
+          property: connectionString
       - key: AUTH0_ISSUER_URL
         sync: false
       - key: AUTH0_AUDIENCE
