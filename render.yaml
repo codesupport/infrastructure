@@ -1,0 +1,40 @@
+services:
+  # api.codesupport.dev
+  - type: web
+    name: codesupport-api
+    env: docker
+    repo: https://github.com/codesupport/api
+    region: frankfurt
+    envVars:
+      - key: DATABASE_URL
+        fromService:
+          name: codesupport-ugc-db
+          type: connectionString
+      - key: AUTH0_ISSUER_URL
+        sync: false
+      - key: AUTH0_AUDIENCE
+        sync: false
+      - key: AUTH0_DOMAIN
+        sync: false
+      - key: AUTH0_CLIENT_ID
+        sync: false
+      - key: AUTH0_CLIENT_SECRET
+        sync: false
+
+  # codesupport discord bot
+  - type: worker
+    name: codesupport-discord-bot
+    env: node
+    repo: https://github.com/codesupport/discord-bot
+    region: frankfurt
+    envVars:
+      - key: DISCORD_TOKEN
+        sync: false
+      - key: ADVENT_OF_CODE_TOKEN
+        sync: false
+      - key: HEALTH_CHECK_URL
+        sync: false
+
+databases:
+  - name: codesupport-ugc-db
+  
